@@ -1,0 +1,15 @@
+#INCLUDE "totvs.CH"
+#INCLUDE "tbiconn.ch"
+#include "parmtype.ch"
+
+Namespace Domain.Models.ValueObjects
+
+Class CustomLog
+    static Method Generate()    
+EndClass
+
+Method Generate(message) Class CustomLog
+    local datetime := Day2Str(Date()) + "/" +  Month2Str(Date()) + "/" + Year2Str(Date())  +" " + TIME()
+    message := datetime + " - " + ProcName(1) + " -> " + message
+    FwLogMsg('WARN',, funName(), funName(), '', '01', message , 0, 0, {})
+Return

@@ -1,0 +1,20 @@
+#INCLUDE "protheus.ch"
+#INCLUDE "msobject.ch"
+#INCLUDE "tbiconn.ch"
+
+Namespace Domain.Models.Responses
+
+Class CustomerResponse
+
+    Method New() CONSTRUCTOR
+    private Branch as character
+    private Code as character
+    private Store as character
+
+EndClass
+
+Method New(customer) Class CustomerResponse
+    ::Branch := customer:A1_FILIAL
+    ::Code := customer:A1_COD
+    ::Store := customer:A1_LOJA
+Return Self:ToJson()

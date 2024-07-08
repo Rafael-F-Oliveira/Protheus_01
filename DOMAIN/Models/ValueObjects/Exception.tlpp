@@ -1,0 +1,44 @@
+#INCLUDE "totvs.ch"
+#INCLUDE "tlpp-core.th"
+#INCLUDE "topconn.ch"
+#INCLUDE "tbiconn.ch"   
+#INCLUDE "Rwmake.ch"
+#INCLUDE "TbiCode.ch"
+
+Namespace Domain.Models.ValueObjects
+
+Class Exception
+    
+    Method New() CONSTRUCTOR
+    Public Method Clear()
+    Public Method GetExceptionMessage()
+    Public Method GetExceptionStackTrace()
+
+    Public Data Exception
+    Public Data HasError
+    Public Data ErrorBlock
+
+EndClass
+
+Method New() Class Exception
+    ::Exception := JsonObject():New()
+    ::HasError := { |error| ::Exception["Message"] := AllTrim(error:Description),;
+                            ::Exception["StackTrace"] := AllTrim(error:ErrorStack),;
+                            ::Exception["Exception"] := "Excecao: " + Chr(10) + ;
+                                                         "Message: " + ::Exception["Message"] + Chr(10) + ;
+                                                         "StackTrace: " + ::Exception["StackTrace"],;
+                            Break(error) }
+    ::ErrorBlock := ErrorBlock(::HasError)
+Return Self
+
+Method Clear() Class Exception
+    ErrorBlock(::ErrorBlock)
+Return Nil
+
+Method GetExceptionMessage() Class Exception
+    Domain.Models.ValueObjects.CustomLog():Generate("Message: " + ::Exception["Message"] + ". ")
+Return ::Exception["Message"]
+
+Method GetExceptionStackTrace() Class Exception
+    Domain.Models.ValueObjects.CustomLog():Generate("StackTrace: " + ::Exception["StackTrace"] + ". ")
+Return ::Exception["StackTrace"]

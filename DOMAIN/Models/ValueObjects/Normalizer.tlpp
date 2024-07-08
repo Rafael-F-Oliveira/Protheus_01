@@ -1,0 +1,59 @@
+#include "totvs.ch"
+#include "tbiconn.ch"
+
+Namespace Domain.Models.ValueObjects
+
+Class Normalizer
+    Static Method Add()
+    Static Method Normalize()
+    Static Method ToText()
+    Static Method ToDate()
+    Static Method ToValue()
+EndClass
+
+Method Add(dataList, field, value) Class Normalizer
+
+    if value == Nil
+        return Nil
+    EndIf
+
+    value := Normalizer():Normalize(field, value)
+    AAdd(dataList, {field, value, Nil})
+
+Return Nil
+
+Method Normalize(field, value) class Normalizer
+
+    local fieldStructure := FWSX3Util():GetFieldStruct(field)
+    local type := ""
+    local syze := ""
+
+    If Len(fieldStructure) == 0 
+        Return value
+    EndIf
+
+    type := fieldStructure[2]
+    syze := fieldStructure[3]
+
+    Do Case 
+        Case type == "C"
+            return Normalizer():ToText(value, syze)    
+        Case type == "D"
+            return Normalizer():ToDate(value)
+        Case type == "N"
+            return Normalizer():ToValue(value)
+    EndCase
+
+Return value
+
+Method ToText(value, size) class Normalizer
+Return Left(Trim(value), size)
+
+Method ToDate(value) class Normalizer
+Return stod(strtran(strtran(value,"-",""),"\",""))
+
+Method ToValue(value) class Normalizer
+    If ValType(value) == "C"
+        Return Val(strtran(strtran(value,".",""),",","."))
+    EndIf
+Return value

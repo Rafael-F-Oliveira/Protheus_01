@@ -1,0 +1,72 @@
+#INCLUDE "protheus.ch"
+#INCLUDE "totvs.ch"
+#INCLUDE "tlpp-core.th"
+#INCLUDE "topconn.ch"
+#INCLUDE "tbiconn.ch"   
+#INCLUDE "Rwmake.ch"
+#INCLUDE "TbiCode.ch"
+
+Namespace Domain.Models.ValueObjects
+
+Class CustomResponse
+    
+    Method New() CONSTRUCTOR
+    Public Method ResultBuilder()
+    Public Method CommandResultBuilder()
+    Public Method ExceptionBuilder()
+    Public Method GetQuery()
+    Public Method GetStatusCode()
+
+    Private Data Message as Character
+    Private Data ErrorStackTrace as Character
+    Private Data StatusCode as Numeric
+    Private Data Query as Character
+    Private Data Data
+
+EndClass
+
+Method New() Class CustomResponse
+
+    ::Message := ""
+    ::ErrorStackTrace := ""
+    ::StatusCode := Domain.Enums.EStatusCode():BadRequest
+    ::Query := ""
+    ::Data := Nil
+
+Return Self
+
+Method ResultBuilder(result) Class CustomResponse
+
+    ::Message := Iif(result == Nil, "Nenhum registro foi processado", "Operacao realizada com sucesso")
+    ::ErrorStackTrace := ""
+    ::StatusCode := Domain.Enums.EStatusCode():Sucess
+    ::Query := GetLastQuery()[2]
+    ::Data := result
+
+Return Self
+
+Method CommandResultBuilder(result) Class CustomResponse
+
+    ::Message := Iif(result == Nil, "Nenhum registro foi processado", "Operacao realizada com sucesso")
+    ::ErrorStackTrace := ""
+    ::StatusCode := Domain.Enums.EStatusCode():Sucess
+    ::Query := ""
+    ::Data := result
+
+Return Self
+
+Method ExceptionBuilder(message, errorStackTrace) Class CustomResponse
+
+    ::Message := message
+    ::ErrorStackTrace := errorStackTrace
+    ::StatusCode := Domain.Enums.EStatusCode():BadRequest
+    ::Query := ""
+    ::Data := Nil
+
+Return Self
+
+Method GetQuery() Class CustomResponse
+Return ::Query
+
+Method GetStatusCode() Class CustomResponse
+Return ::StatusCode

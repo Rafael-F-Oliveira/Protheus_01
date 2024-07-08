@@ -1,0 +1,138 @@
+#INCLUDE "protheus.ch"
+#INCLUDE "tlpp-core.th"
+#INCLUDE "tlpp-object.th"
+#INCLUDE "tlpp-rest.th"
+
+Namespace Infrastructure.Queries
+
+Class CustomerQueries //Implements IQueries
+    
+    Method New() CONSTRUCTOR
+    Public Method GetAll()
+    Public Method GetById()
+    Public Method GetCount()
+    Public Method GetPage()
+    Static Protheus   
+
+EndClass
+
+Method New() Class CustomerQueries
+    Protheus := GetNextAlias()
+Return Self
+
+Method GetAll() Class CustomerQueries
+
+    local customers := Nil
+    local customer
+
+    BeginSql Alias Protheus
+
+        SELECT *
+        FROM %Table:SA1% SA1
+        WHERE D_E_L_E_T_ = ''
+
+    EndSql
+
+    If (Protheus)->(!Eof())
+
+        customers := {}
+
+        While (Protheus)->(!Eof())
+            customer := Domain.Models.Entities.Protheus.CustomerEntity():New(Protheus)
+            AAdd(customers, customer)
+            (Protheus)->(DbSkip())
+        EndDo
+
+    EndIf
+
+    (Protheus)->(DbCloseArea())
+
+Return customers
+
+Method GetById(branch, code, store) Class CustomerQueries
+
+    local customers := Nil
+    local customer
+
+    BeginSql Alias Protheus
+
+        SELECT *
+        FROM %Table:SA1% SA1
+        WHERE A1_FILIAL = %Exp:branch%
+        AND A1_COD = %Exp:code%
+        AND A1_LOJA = %Exp:store%
+        AND D_E_L_E_T_ = ''
+
+    EndSql
+
+    If (Protheus)->(!Eof())
+
+        customers := {}
+
+        While (Protheus)->(!Eof())
+            customer := Domain.Models.Entities.Protheus.CustomerEntity():New(Protheus)
+            AAdd(customers, customer)
+            (Protheus)->(DbSkip())
+        EndDo
+
+    EndIf
+
+    (Protheus)->(DbCloseArea())
+
+Return customers
+
+Method GetCount() Class CustomerQueries
+
+    local count := Nil
+
+    BeginSql Alias Protheus
+
+        SELECT COUNT(*) AS COUNT
+        FROM %Table:SA1% SA1
+        WHERE D_E_L_E_T_ = ''
+
+    EndSql
+
+    If (Protheus)->(!Eof())
+        count = JsonObject():New()
+        count["COUNT"] := (Protheus)->COUNT
+    EndIf
+
+    (Protheus)->(DbCloseArea())
+
+Return count 
+
+Method GetPage(registerByPage, page) Class CustomerQueries
+
+    local offSet := (Val(page) - 1) * Val(registerByPage)
+    local customers := Nil
+    local customer
+
+    BeginSql Alias Protheus
+
+        SELECT *
+        FROM %Table:SA1% SA1
+        WHERE D_E_L_E_T_ = ''
+        ORDER BY R_E_C_N_O_ DESC,
+                 A1_FILIAL DESC,
+                 A1_COD DESC,
+                 A1_LOJA DESC
+        OFFSET %Exp:offSet% ROWS FETCH NEXT %Exp:Val(registerByPage)% ROWS ONLY;
+
+    EndSql
+
+    If (Protheus)->(!Eof())
+
+        customers := {}
+
+        While (Protheus)->(!Eof())
+            customer := Domain.Models.Entities.Protheus.CustomerEntity():New(Protheus)
+            AAdd(customers, customer)
+            (Protheus)->(DbSkip())
+        EndDo
+
+    EndIf
+
+    (Protheus)->(DbCloseArea())
+
+Return customers 

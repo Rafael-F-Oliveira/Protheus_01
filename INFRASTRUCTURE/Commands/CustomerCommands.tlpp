@@ -1,0 +1,156 @@
+#INCLUDE "totvs.CH"
+#INCLUDE "protheus.ch"
+#INCLUDE "RESTFUL.CH"
+#INCLUDE "tbiconn.ch"
+#INCLUDE "TbiCode.ch"
+#INCLUDE "TopConn.ch"
+#INCLUDE "tlpp-core.th"
+#INCLUDE "tlpp-object.th"
+#INCLUDE "tlpp-rest.th"
+
+Namespace Infrastructure.Commands
+
+Class CustomerCommands //Implements ICommands
+    
+    Method New() CONSTRUCTOR
+    Public Method Insert()
+    Public Method Update()
+    Public Method Delete()
+
+    Private Data EnvironmentService
+    Private Data Customer
+    Private Data ComplementaryData
+    Private Data Temporary
+    Private Data Response
+
+EndClass
+
+Method New() Class CustomerCommands
+    ::EnvironmentService := Domain.Models.ValueObjects.Enviroment():new()
+    ::Customer := {}
+    ::ComplementaryData := {} 
+    ::Temporary := {}
+    ::Response := {}
+Return Self
+
+Method Insert(customerRequest) Class CustomerCommands   
+
+    local inserted
+    local keys := customerRequest:GetNames()
+    local complementaryDataKeys
+    local complementaryDataIndex := 1
+    local index := 1 
+    private lMsErroAuto := .F.  
+
+    ::EnvironmentService:ChangeEnvironment(customerRequest["A1_FILIAL"])
+
+    For index := 1 to Len(keys)
+        If !(keys[index] $ "ComplementaryData")
+            Domain.Models.ValueObjects.Normalizer():Add(@::Customer, keys[index], customerRequest[keys[index]])
+        EndIf
+    Next index
+
+    If customerRequest["ComplementaryData"] <> Nil
+        For complementaryDataIndex := 1 To Len(customerRequest["ComplementaryData"])
+            
+            complementaryDataKeys := customerRequest["ComplementaryData"][complementaryDataIndex]:GetName()
+            index := 1
+
+            For index := 1 To Len(complementaryDataKeys)
+                Domain.Models.ValueObjects.Normalizer():Add(@::Temporary,;
+                                                            complementaryDataKeys[index],;
+                                                            customerRequest["ComplementaryData"][complementaryDataIndex][complementaryDataKeys[index]])
+            Next index
+
+            AAdd(ComplementaryData, FWVetByDic(::Temporary, "AI0"))
+            Temporary := {}
+
+        Next complementaryDataIndex
+    EndIf
+    
+    MSExecAuto({|a,b,c| CRMA980(a,b,c)}, FWVetByDic(::Customer, "SA1"), Domain.Enums.EOperation():Insert, ::ComplementaryData)        
+
+    If lMsErroAuto
+        cRetWs := MostraErro("\system\","erro_CustomerCommands_CRMA980_"+dtos(dDataBase)+"_"+StrTran(time(),":","")+".txt")
+        UserException(cRetWs)
+    EndIf
+
+    inserted := Domain.Models.Entities.Protheus.CustomerEntity():LoadCommandResult(customerRequest["A1_FILIAL"],; 
+                                                                                   customerRequest["A1_COD"],;
+                                                                                   customerRequest["A1_LOJA"])
+    AAdd(::Response, inserted)
+
+Return ::Response
+
+Method Update(customerRequest) Class CustomerCommands
+
+    local updated
+    local keys := customerRequest:GetNames()
+    local complementaryDataKeys
+    local complementaryDataIndex := 1
+    local index := 1 
+    private lMsErroAuto := .F.   
+
+    ::EnvironmentService:ChangeEnvironment(customerRequest["A1_FILIAL"])
+
+    For index := 1 to Len(keys)
+        If !(keys[index] $ "ComplementaryData")
+            Domain.Models.ValueObjects.Normalizer():Add(@::Customer, keys[index], customerRequest[keys[index]])
+        EndIf
+    Next index
+
+    If customerRequest["ComplementaryData"] <> Nil
+        For complementaryDataIndex := 1 To Len(customerRequest["ComplementaryData"])
+            
+            complementaryDataKeys := customerRequest["ComplementaryData"][complementaryDataIndex]:GetName()
+            index := 1
+
+            For index := 1 To Len(complementaryDataKeys)
+                Domain.Models.ValueObjects.Normalizer():Add(@::Temporary,;
+                                                            complementaryDataKeys[index],;
+                                                            customerRequest["ComplementaryData"][complementaryDataIndex][complementaryDataKeys[index]])
+            Next index
+
+            AAdd(ComplementaryData, FWVetByDic(::Temporary, "AI0"))
+            Temporary := {}
+
+        Next complementaryDataIndex
+    EndIf
+
+    MSExecAuto({|a,b,c| CRMA980(a,b,c)}, FWVetByDic(::Customer, "SA1"), Domain.Enums.EOperation():Update, ::ComplementaryData)               
+
+    If lMsErroAuto
+        cRetWs := MostraErro("\system\","erro_CustomerCommands_CRMA980_"+dtos(dDataBase)+"_"+StrTran(time(),":","")+".txt")
+        UserException(cRetWs)
+    EndIf
+
+    updated := Domain.Models.Entities.Protheus.CustomerEntity():LoadCommandResult(customerRequest["A1_FILIAL"],; 
+                                                                                   customerRequest["A1_COD"],;
+                                                                                   customerRequest["A1_LOJA"])
+    AAdd(::Response, updated)
+
+Return ::Response
+
+Method Delete(customerRequest) Class CustomerCommands
+
+    local deleted
+    private lMsErroAuto := .F.  
+
+    ::EnvironmentService:ChangeEnvironment(customerRequest["A1_FILIAL"])
+
+    Domain.Models.ValueObjects.Normalizer():Add(@::Customer, "A1_COD", customerRequest["A1_COD"])
+    Domain.Models.ValueObjects.Normalizer():Add(@::Customer, "A1_LOJA", customerRequest["A1_LOJA"])
+
+    MSExecAuto({|a,b,c| CRMA980(a,b,c)}, ::Customer, Domain.Enums.EOperation():Delete, ::ComplementaryData)          
+
+    If lMsErroAuto
+        cRetWs := MostraErro("\system\","erro_CustomerCommands_CRMA980_"+dtos(dDataBase)+"_"+StrTran(time(),":","")+".txt")
+        UserException(cRetWs)
+    EndIf
+
+    deleted := Domain.Models.Entities.Protheus.CustomerEntity():LoadCommandResult(customerRequest["A1_FILIAL"],; 
+                                                                                   customerRequest["A1_COD"],;
+                                                                                   customerRequest["A1_LOJA"])
+    AAdd(::Response, deleted)
+
+Return ::Response

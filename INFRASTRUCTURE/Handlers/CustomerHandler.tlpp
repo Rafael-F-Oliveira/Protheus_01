@@ -1,0 +1,205 @@
+#INCLUDE "protheus.ch"
+
+Namespace Infrastructure.Handlers
+
+Class CustomerHandler //Implements IHandlers
+    
+    Method New() CONSTRUCTOR
+    Public Method GetAll()
+    Public Method GetById()
+    Public Method GetCount()
+    Public Method GetPage()
+    Public Method Post()
+    Public Method Put()
+    Public Method Delete()
+
+EndClass
+
+Method New() Class CustomerHandler
+Return Self
+
+Method GetAll() Class CustomerHandler
+
+    Domain.Models.ValueObjects.CustomLog():Generate("Start do Método GetAll() da Classe CustomerHandler.")
+    local query := Infrastructure.Queries.CustomerQueries():New()
+    local exceptionService := Domain.Models.ValueObjects.Exception():New()
+    local customResponse := Domain.Models.ValueObjects.CustomResponse():New()
+    local result := Nil
+
+    Begin Sequence
+
+        result := query:GetAll()
+        customResponse := customResponse:ResultBuilder(result)
+        Domain.Models.ValueObjects.CustomLog():Generate("Query consultada: " + customResponse:GetQuery())
+
+    Recover
+
+        message := exceptionService:GetExceptionMessage()
+		errorStackTrace := exceptionService:GetExceptionStackTrace()
+        customResponse := customResponse():ExceptionBuilder(message, errorStackTrace)
+
+    EndSequence
+
+    exceptionService:Clear()
+    Domain.Models.ValueObjects.CustomLog():Generate("Fim do Método GetAll() da Classe CustomerHandler.")
+    
+Return customResponse
+
+Method GetById(branch, code, store) Class CustomerHandler
+
+    Domain.Models.ValueObjects.CustomLog():Generate("Start do Método GetById() da Classe CustomerHandler.")
+    local query := Infrastructure.Queries.CustomerQueries():New()
+    local exceptionService := Domain.Models.ValueObjects.Exception():New()
+    local customResponse := Domain.Models.ValueObjects.CustomResponse():New()
+    local result := Nil
+
+    Begin Sequence
+
+        result := query:GetById(branch, code, store)
+        customResponse := customResponse:ResultBuilder(result)
+        Domain.Models.ValueObjects.CustomLog():Generate("Query consultada: " + customResponse:GetQuery())
+
+    Recover
+
+        message := exceptionService:GetExceptionMessage()
+		errorStackTrace := exceptionService:GetExceptionStackTrace()
+        customResponse := customResponse():ExceptionBuilder(message, errorStackTrace)
+
+    EndSequence
+
+    exceptionService:Clear()
+    Domain.Models.ValueObjects.CustomLog():Generate("Fim do Método GetById() da Classe CustomerHandler.")
+    
+Return customResponse
+
+Method GetPage(registerByPage, page) Class CustomerHandler
+
+    Domain.Models.ValueObjects.CustomLog():Generate("Start do Método GetPage() da Classe CustomerHandler.")
+    local query := Infrastructure.Queries.CustomerQueries():New()
+    local exceptionService := Domain.Models.ValueObjects.Exception():New()
+    local customResponse := Domain.Models.ValueObjects.CustomResponse():New()
+    local result := Nil
+
+    Begin Sequence
+
+        result := query:GetPage(registerByPage, page)
+        customResponse := customResponse:ResultBuilder(result)
+        Domain.Models.ValueObjects.CustomLog():Generate("Query consultada: " + customResponse:GetQuery())
+
+    Recover
+
+        message := exceptionService:GetExceptionMessage()
+		errorStackTrace := exceptionService:GetExceptionStackTrace()
+        customResponse := customResponse():ExceptionBuilder(message, errorStackTrace)
+
+    EndSequence
+
+    exceptionService:Clear()
+    Domain.Models.ValueObjects.CustomLog():Generate("Fim do Método GetPage() da Classe CustomerHandler.")
+    
+Return customResponse
+
+Method GetCount() Class CustomerHandler
+
+    Domain.Models.ValueObjects.CustomLog():Generate("Start do Método GetCount() da Classe CustomerHandler.")
+    local query := Infrastructure.Queries.CustomerQueries():New()
+    local exceptionService := Domain.Models.ValueObjects.Exception():New()
+    local customResponse := Domain.Models.ValueObjects.CustomResponse():New()
+    local result := Nil
+
+    Begin Sequence
+
+        result := query:GetCount()
+        customResponse := customResponse:ResultBuilder(result)
+        Domain.Models.ValueObjects.CustomLog():Generate("Query consultada: " + customResponse:GetQuery())
+
+    Recover
+
+        message := exceptionService:GetExceptionMessage()
+		errorStackTrace := exceptionService:GetExceptionStackTrace()
+        customResponse := customResponse():ExceptionBuilder(message, errorStackTrace)
+
+    EndSequence
+
+    exceptionService:Clear()
+    Domain.Models.ValueObjects.CustomLog():Generate("Fim do Método GetCount() da Classe CustomerHandler.")
+
+Return customResponse
+
+Method Post(customerRequest) Class CustomerHandler
+
+    Domain.Models.ValueObjects.CustomLog():Generate("Start do Método Post() da Classe CustomerHandler.")
+    local command := Infrastructure.Commands.CustomerCommands():New()
+    local exceptionService := Domain.Models.ValueObjects.Exception():New()
+    local customResponse := Domain.Models.ValueObjects.CustomResponse():New()
+    local result := Nil
+
+    Begin Sequence
+
+        result := command:Insert(customerRequest)
+        customResponse:CommandResultBuilder(result)
+
+    Recover
+
+        message := exceptionService:GetExceptionMessage()
+		errorStackTrace := exceptionService:GetExceptionStackTrace()
+        customResponse := customResponse():ExceptionBuilder(message, errorStackTrace)
+
+    EndSequence
+
+    exceptionService:Clear()
+    Domain.Models.ValueObjects.CustomLog():Generate("Fim do Método Post() da Classe CustomerHandler.")
+
+Return customResponse
+
+Method Put(customerRequest) Class CustomerHandler
+
+    Domain.Models.ValueObjects.CustomLog():Generate("Start do Método Put() da Classe CustomerHandler.")
+    local command := Infrastructure.Commands.CustomerCommands():New()
+    local exceptionService := Domain.Models.ValueObjects.Exception():New()
+    local customResponse := Domain.Models.ValueObjects.CustomResponse():New()
+    local result := Nil
+
+    Begin Sequence
+
+        result := command:Update(customerRequest)
+        customResponse:CommandResultBuilder(result)
+
+    Recover
+
+        message := exceptionService:GetExceptionMessage()
+		errorStackTrace := exceptionService:GetExceptionStackTrace()
+        customResponse := customResponse():ExceptionBuilder(message, errorStackTrace)
+
+    EndSequence
+
+    exceptionService:Clear()
+    Domain.Models.ValueObjects.CustomLog():Generate("Fim do Método Put() da Classe CustomerHandler.")
+
+Return customResponse
+
+Method Delete(customerRequest) Class CustomerHandler
+
+    Domain.Models.ValueObjects.CustomLog():Generate("Start do Método Delete() da Classe CustomerHandler.")
+    local command := Infrastructure.Commands.CustomerCommands():New()
+    local exceptionService := Domain.Models.ValueObjects.Exception():New()
+    local customResponse := Domain.Models.ValueObjects.CustomResponse():New()
+    local result := Nil
+
+    Begin Sequence
+
+        result := command:Delete(customerRequest)
+        customResponse:CommandResultBuilder(result)
+
+    Recover
+
+        message := exceptionService:GetExceptionMessage()
+		errorStackTrace := exceptionService:GetExceptionStackTrace()
+        customResponse := customResponse():ExceptionBuilder(message, errorStackTrace)
+
+    EndSequence
+
+    exceptionService:Clear()
+    Domain.Models.ValueObjects.CustomLog():Generate("Fim do Método Delete() da Classe CustomerHandler.")
+
+Return customResponse

@@ -1,0 +1,136 @@
+#INCLUDE "totvs.CH"
+#INCLUDE "protheus.ch"
+#INCLUDE "RESTFUL.CH"
+#INCLUDE "tbiconn.ch"
+#INCLUDE "TbiCode.ch"
+#INCLUDE "TopConn.ch"
+#INCLUDE "tlpp-core.th"
+#INCLUDE "tlpp-object.th"
+#INCLUDE "tlpp-rest.th"
+
+Namespace Infrastructure.Commands
+
+Class CustomerAddressCommands //Implements ICommands
+    
+    Method New() CONSTRUCTOR
+    Public Method CreateInsert()
+    Public Method CreateUpdate()
+    Public Method CreateDelete()
+    Private Method Validate()
+    Private Method AfterRunning()
+
+    Private Data Response
+
+EndClass
+
+Method New() Class CustomerAddressCommands
+    ::Response := {}
+Return Self
+
+Method CreateInsert(table, index) Class CustomerAddressCommands   
+
+    local inserted := Domain.Models.Entities.Protheus.CustomerAddressEntity():New()
+    local result := 0
+
+    result := AxInclui(table, index, Domain.Enums.EOperation():Insert)
+
+    Do Case
+
+        Case result == 1
+            MsgInfo("Inclusao efetuada com sucesso!") 
+            inserted := inserted:LoadCommandResult(Z01_FILIAL,;
+                                                   Z01_COD,;
+                                                   Z01_EHCLI,;
+                                                   Z01_CLIFOR,;
+                                                   Z01_LOJA,;
+                                                   Z01_TPEND,;
+                                                   Z01_CEP,;
+                                                   Z01_EST,;
+                                                   Z01_MUN,;
+                                                   Z01_BAIRRO,;
+                                                   Z01_LOGR,;
+                                                   Z01_NUM,;
+                                                   Z01_COMPLQ,;
+                                                   Z01_ATIVO)
+            AAdd(::Response, inserted)
+            ::AfterRunning()
+
+        Case result != 1 .AND. result != 3
+            MsgInfo("Falha ao efetuar o cadastro!")
+
+    EndCase
+
+Return ::Response
+
+Method CreateUpdate(table, index) Class CustomerAddressCommands
+
+    local updated := Domain.Models.Entities.Protheus.CustomerAddressEntity():New()
+    local result := 0
+
+    result := AxAltera(table, index, Domain.Enums.EOperation():Update)
+    
+    Do Case
+
+        Case result == 1
+            MsgInfo("Alteracao efetuada com sucesso!")  
+            updated := inserted:LoadCommandResult(Z01_FILIAL,;
+                                                   Z01_COD,;
+                                                   Z01_EHCLI,;
+                                                   Z01_CLIFOR,;
+                                                   Z01_LOJA,;
+                                                   Z01_TPEND,;
+                                                   Z01_CEP,;
+                                                   Z01_EST,;
+                                                   Z01_MUN,;
+                                                   Z01_BAIRRO,;
+                                                   Z01_LOGR,;
+                                                   Z01_NUM,;
+                                                   Z01_COMPLQ,;
+                                                   Z01_ATIVO)
+            AAdd(::Response, inserted)
+            ::AfterRunning()
+
+        Case result != 1 .AND. result != 3
+            MsgInfo("Falha ao efetuar a alteracao!")   
+
+    EndCase
+
+Return ::Response
+
+Method CreateDelete(table, index) Class CustomerAddressCommands
+
+    local deleted := Domain.Models.Entities.Protheus.CustomerAddressEntity():New()
+    local result := 0
+
+    result := AxDeleta(table, index, Domain.Enums.EOperation():Delete)
+
+    Do Case
+
+        Case result == 2
+            MsgInfo("Exclusao efetuada com sucesso!")
+            deleted := inserted:LoadCommandResult(Z01_FILIAL,;
+                                                   Z01_COD,;
+                                                   Z01_EHCLI,;
+                                                   Z01_CLIFOR,;
+                                                   Z01_LOJA,;
+                                                   Z01_TPEND,;
+                                                   Z01_CEP,;
+                                                   Z01_EST,;
+                                                   Z01_MUN,;
+                                                   Z01_BAIRRO,;
+                                                   Z01_LOGR,;
+                                                   Z01_NUM,;
+                                                   Z01_COMPLQ,;
+                                                   Z01_ATIVO)
+            AAdd(::Response, inserted)
+            ::AfterRunning()
+
+        Case result != 2 .AND. result != 3
+            MsgInfo("Falha ao efetuar a exclusao!")  
+
+    EndCase
+
+Return ::Response
+
+Method AfterRunning() Class CustomerAddressCommands
+Return .T.

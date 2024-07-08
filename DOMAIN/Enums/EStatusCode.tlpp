@@ -1,0 +1,20 @@
+#INCLUDE "protheus.ch"
+
+Namespace Domain.Enums
+
+Class EStatusCode
+    
+    Static Method Sucess()
+    Static Method Created()
+    Static Method BadRequest()
+
+EndClass
+
+Method Sucess() Class EStatusCode
+Return 200
+
+Method Created() Class EStatusCode
+Return 201
+
+Method BadRequest() Class EStatusCode
+Return 400

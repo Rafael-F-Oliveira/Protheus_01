@@ -1,0 +1,68 @@
+#INCLUDE "protheus.ch"
+#INCLUDE "msobject.ch"
+#INCLUDE "totvs.ch"
+#INCLUDE "topconn.ch"
+#INCLUDE "tbiconn.ch"   
+#INCLUDE "Rwmake.ch"
+#INCLUDE "TbiCode.ch"
+#INCLUDE "tlpp-core.th"
+#INCLUDE "tlpp-object.th"
+#INCLUDE "tlpp-rest.th"
+
+namespace Domain.Models.Entities.Protheus
+
+Class CustomerAddressEntity
+
+    Method New() CONSTRUCTOR
+    Public Method LoadCommandResult()
+    private Data Branch as character
+    private Data Code as character
+    private Data IsCustomer as logical
+    private Data CustomerOrSupplier as character
+    private Data Store as character
+    private Data Type as character
+    private Data PostalCode as numeric
+    private Data State as character
+    private Data City as character
+    private Data Neighborhood as character
+    private Data Road as character
+    private Data Number as numeric
+    private Data Complement as character
+    private Data IsActive as logical
+
+EndClass
+
+Method New() Class CustomerAddressEntity
+Return Self
+
+Method LoadCommandResult(branch,;
+                         code,;
+                         isCustomer,; 
+                         customerOrSupplier,; 
+                         store,; 
+                         type,; 
+                         postalCode,; 
+                         state,; 
+                         city,; 
+                         neighborhood,; 
+                         road,; 
+                         number,; 
+                         complement,; 
+                         isactive) Class CustomerAddressEntity
+
+    ::Branch := branch
+    ::Code := code
+    ::IsCustomer := isCustomer
+    ::CustomerOrSupplier := customerOrSupplier
+    ::Store := store
+    ::Type := type
+    ::PostalCode := postalCode
+    ::State := state
+    ::City := city
+    ::Neighborhood := neighborhood
+    ::Road := road
+    ::Number := number
+    ::Complement := complement
+    ::IsActive := isactive
+
+Return Self

@@ -1,0 +1,34 @@
+#INCLUDE "protheus.ch"
+#INCLUDE "msobject.ch"
+#INCLUDE "totvs.ch"
+#INCLUDE "topconn.ch"
+#INCLUDE "tbiconn.ch"   
+#INCLUDE "Rwmake.ch"
+#INCLUDE "TbiCode.ch"
+#INCLUDE "tlpp-core.th"
+#INCLUDE "tlpp-object.th"
+#INCLUDE "tlpp-rest.th"
+
+namespace Domain.Models.Entities.Protheus
+
+Class CustomerEntity
+
+    Method New() CONSTRUCTOR
+    Public Method LoadCommandResult()
+    private Data Branch as character
+    private Data Code as character
+    private Data Store as character
+
+EndClass
+
+Method New(protheus) Class CustomerEntity
+    ::Branch := (protheus)->A1_FILIAL
+    ::Code := (protheus)->A1_COD
+    ::Store := (protheus)->A1_LOJA
+Return Self
+
+Method LoadCommandResult(branch, code, store) Class CustomerEntity
+    ::Branch := branch
+    ::Code := code
+    ::Store := store
+Return Self

@@ -1,0 +1,27 @@
+#INCLUDE "protheus.ch"
+
+Namespace Domain.Models.ValueObjects
+
+Class Enviroment
+
+    Method New() CONSTRUCTOR
+    Public Method ChangeEnvironment()
+    
+EndClass
+
+Method New() Class Enviroment
+Return Self
+
+Method ChangeEnvironment(branchOfficeCode) Class Enviroment
+
+    If(cFilAnt == branchOfficeCode)
+        return .T.
+    EndIf
+
+    CustomLog():Generate("Alterada a Filial do Sistema para " + branchOfficeCode + ". ")
+
+    cFilAnt := branchOfficeCode
+	openSM0(cEmpAnt+cFilAnt)
+	openFile(cEmpAnt+cFilAnt)
+
+Return .T.

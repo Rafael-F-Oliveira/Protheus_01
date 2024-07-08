@@ -1,0 +1,16 @@
+#INCLUDE "protheus.ch"
+#INCLUDE "tlpp-core.th"
+
+Namespace Domain.Handlers
+
+Interface IHandler
+
+    Method Delete()
+    Method GetAll()
+    Method GetById()
+    Method GetCount()
+    Method GetPage()
+    Method Post()
+    Method Put()
+    
+End Interface

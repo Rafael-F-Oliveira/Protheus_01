@@ -1,0 +1,18 @@
+#INCLUDE 'Protheus.ch'
+#INCLUDE 'ParmType.ch'
+#INCLUDE 'TopConn.ch' 
+
+User Function CustomerAddressInsert(table, index, operation)
+    local customerHandler := Infrastructure.Handlers.CustomerAddressHandler():New()
+    result := customerHandler:CreatePost(table, index)
+Return Nil
+
+User Function CustomerAddressUpdate(table, index, operation)
+    local customerHandler := Infrastructure.Handlers.CustomerAddressHandler():New()
+    result := customerHandler:CreatePut(table, index)
+Return Nil
+
+User Function CustomerAddressDelete(table, index, operation)
+    local customerHandler := Infrastructure.Handlers.CustomerAddressHandler():New()
+    result := customerHandler:CreateDelete(table, index)
+Return Nil

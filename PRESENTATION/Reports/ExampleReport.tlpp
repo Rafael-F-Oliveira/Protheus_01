@@ -1,0 +1,4 @@
+// O Relatório deve acionar um Evento na camada de Aplicação, dependendo do que está sendo realizado
+// O evento acionará um handler na camada de infraestrutura para realizar o fluxo do negócio
+// O Handler irá acionar um Command ou Query caso precise modificar ou buscar dados no Banco de dados
+// No domínio ficaram os modelos da estrutura das tabelas (entidades) e detalhes essenciais ao negócio

@@ -1,0 +1,12 @@
+#INCLUDE "protheus.ch"
+#INCLUDE "tlpp-core.th"
+
+Namespace Domain.Commands
+
+Interface ICommands
+
+    Method Insert()
+    Method Update()
+    Method Delete()
+    
+End Interface

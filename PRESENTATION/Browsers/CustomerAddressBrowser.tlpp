@@ -1,0 +1,30 @@
+#INCLUDE 'Protheus.ch'
+#INCLUDE 'ParmType.ch'
+#INCLUDE 'TopConn.ch' 
+
+User Function CustomerAddressBrowser()
+
+    local table := "Z01"
+    local filter := "Z01_FILIAL == '" + xFilial('Z01') + "'"
+    private cCadastro := "ENDEREÇO CLIENTE/ FORNECEDOR" // nome da variavel não pode ser alterado
+    private aRotina := {} // nome da variavel não pode ser alterado
+    private indexList := {}
+    private filterBrowser  := {|| FilBrowse(table, @indexList, @filter)}
+
+    AAdd(aRotina, { "Pesquisar", "AxPesqui", 0, 1 })
+    AAdd(aRotina, { "Visualizar", "AxVisual", 0, 2 }) 
+    AAdd(aRotina, { "Incluir", "U_CustomerAddressInsert", 0, 3 })
+    AAdd(aRotina, { "Alterar", "U_CustomerAddressUpdate", 0, 4 })
+    AAdd(aRotina, { "Excluir", "U_CustomerAddressDelete", 0, 5 })
+
+    dbSelectArea(table)
+    dbSetOrder(1)
+
+    Eval(filterBrowser)
+
+    DbGoTop()
+    mBrowse(,,,,table)
+
+    EndFilBrw(table, indexList, filter)
+
+Return Nil

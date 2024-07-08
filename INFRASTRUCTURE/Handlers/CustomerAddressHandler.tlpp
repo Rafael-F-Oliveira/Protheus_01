@@ -1,0 +1,93 @@
+#INCLUDE "protheus.ch"
+
+Namespace Infrastructure.Handlers
+
+Class CustomerAddressHandler //Implements IHandlers
+    
+    Method New() CONSTRUCTOR
+    Public Method CreatePost()
+    Public Method CreatePut()
+    Public Method CreateDelete()
+
+EndClass
+
+Method New() Class CustomerAddressHandler
+Return Self
+
+Method CreatePost(request) Class CustomerAddressHandler
+
+    Domain.Models.ValueObjects.CustomLog():Generate("Start do metodo CreatePost() da Classe CustomerAddressHandler.")
+    local command := Infrastructure.Commands.CustomerAddressCommands():New()
+    local exceptionService := Domain.Models.ValueObjects.Exception():New()
+    local customResponse := Domain.Models.ValueObjects.CustomResponse():New()
+    local result := Nil
+
+    Begin Sequence
+
+        result := command:CreateInsert(request)
+        customResponse:CommandResultBuilder(result)
+
+    Recover
+
+        message := exceptionService:GetExceptionMessage()
+		errorStackTrace := exceptionService:GetExceptionStackTrace()
+        customResponse := customResponse():ExceptionBuilder(message, errorStackTrace)
+
+    EndSequence
+
+    exceptionService:Clear()
+    Domain.Models.ValueObjects.CustomLog():Generate("Fim do metodo CreatePost() da Classe CustomerAddressHandler.")
+
+Return customResponse
+
+Method CreatePut(request) Class CustomerAddressHandler
+
+    Domain.Models.ValueObjects.CustomLog():Generate("Start do metodo CreatePut() da Classe CustomerAddressHandler.")
+    local command := Infrastructure.Commands.CustomerAddressCommands():New()
+    local exceptionService := Domain.Models.ValueObjects.Exception():New()
+    local customResponse := Domain.Models.ValueObjects.CustomResponse():New()
+    local result := Nil
+
+    Begin Sequence
+
+        result := command:CreateUpdate(request)
+        customResponse:CommandResultBuilder(result)
+
+    Recover
+
+        message := exceptionService:GetExceptionMessage()
+		errorStackTrace := exceptionService:GetExceptionStackTrace()
+        customResponse := customResponse():ExceptionBuilder(message, errorStackTrace)
+
+    EndSequence
+
+    exceptionService:Clear()
+    Domain.Models.ValueObjects.CustomLog():Generate("Fim do metodo CreatePut() da Classe CustomerAddressHandler.")
+
+Return customResponse
+
+Method CreateDelete(request) Class CustomerAddressHandler
+
+    Domain.Models.ValueObjects.CustomLog():Generate("Start do metodo CreateDelete() da Classe CustomerAddressHandler.")
+    local command := Infrastructure.Commands.CustomerAddressCommands():New()
+    local exceptionService := Domain.Models.ValueObjects.Exception():New()
+    local customResponse := Domain.Models.ValueObjects.CustomResponse():New()
+    local result := Nil
+
+    Begin Sequence
+
+        result := command:CreateDelete(request)
+        customResponse:CommandResultBuilder(result)
+
+    Recover
+
+        message := exceptionService:GetExceptionMessage()
+		errorStackTrace := exceptionService:GetExceptionStackTrace()
+        customResponse := customResponse():ExceptionBuilder(message, errorStackTrace)
+
+    EndSequence
+
+    exceptionService:Clear()
+    Domain.Models.ValueObjects.CustomLog():Generate("Fim do metodo CreateDelete() da Classe CustomerAddressHandler.")
+
+Return customResponse

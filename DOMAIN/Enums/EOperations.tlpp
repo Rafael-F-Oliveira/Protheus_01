@@ -1,0 +1,28 @@
+#INCLUDE "protheus.ch"
+
+Namespace Domain.Enums
+
+Class EOperation
+
+    Static Method SelectByWhere()
+    Static Method SelectById()
+    Static Method Insert()
+    Static Method Update()
+    Static Method Delete()
+
+EndClass
+
+Method SelectByWhere() Class EOperation
+Return 1
+
+Method SelectById() Class EOperation
+Return 2
+
+Method Insert() Class EOperation
+Return 3
+
+Method Update() Class EOperation
+Return 4
+
+Method Delete() Class EOperation
+Return 5
